@@ -1,0 +1,11 @@
+const assert=require('node:assert/strict');
+const {depositCoverage}=require('../dist/cash-protection.js');
+const account=(balance,holder='Alex',licence='Commonwealth')=>({balance,holder,licence});
+assert.deepEqual(depositCoverage([account(280000),account(40000)],250000),[{holder:'Alex',licence:'Commonwealth',total:320000,within:250000,outside:70000,headroom:0}]);
+assert.equal(depositCoverage([account(100000),account(150000,'Company')],250000).length,2);
+assert.equal(depositCoverage([account(200000),account(200000,'Alex','Other ADI')],250000).reduce((s,g)=>s+g.outside,0),0);
+assert.equal(depositCoverage([account(145000),account(15000)],120000)[0].outside,40000);
+assert.equal(depositCoverage([account(0)],250000)[0].headroom,250000);
+assert.throws(()=>depositCoverage([account(-1)],250000));
+assert.throws(()=>depositCoverage([account(NaN)],250000));
+console.log('PASS: same-licence aggregation, separate legal holders, separate licences, UK/AU limits and invalid balances.');

@@ -1,0 +1,1 @@
+const themeButton=document.querySelector('#theme');themeButton.onclick=()=>{document.documentElement.dataset.theme=document.documentElement.dataset.theme==='dark'?'light':'dark';try{localStorage.setItem('ron-appearance',document.documentElement.dataset.theme)}catch{}};
